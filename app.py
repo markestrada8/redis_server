@@ -25,18 +25,9 @@ def add_url():
 
 @app.route("/url/get", methods=["GET"])
 def get_urls():
-    # all_keys = redis_client.keys('*http://localhost:3000*')
     all_keys = list(redis_client.scan_iter("*"))
     values = [redis_client.get(key) for key in all_keys]
     return jsonify([{ "link": all_keys[i].decode("utf-8"), "url":values[i].decode("utf-8")} for i in range(len(values))])
-
-
-@app.route("/url/get-value", methods=["POST"])
-def get_url():
-    link = request.json.get("link")
-    url = redis_client.get(link)
-
-    return jsonify(url)
 
 
 if __name__ == "__main__":
